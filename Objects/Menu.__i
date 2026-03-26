@@ -1,0 +1,1 @@
+"Header\Menu.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(.\Header) DEBUG OBJECTEXTEND PRINT(.\Listings\Menu.lst) OBJECT(.\Objects\Menu.obj)

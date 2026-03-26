@@ -1,0 +1,1 @@
+"Header\Soft_I2C.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(.\Header) DEBUG OBJECTEXTEND PRINT(.\Listings\Soft_I2C.lst) OBJECT(.\Objects\Soft_I2C.obj)
