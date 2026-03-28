@@ -20,7 +20,6 @@ void I2C_timeout_delay(void)
 
 void I2C_delay(void)
 {
-    // 超时延时，比普通延时稍长
     _nop_();
     _nop_();
     _nop_();
@@ -155,16 +154,16 @@ uint8_t I2C_wait_ack(void)
  *@note 发送一个字节
  *@param 你需要发送的字节
 ***/
-void I2C_write_byte(uint8_t dat)
+void I2C_write_byte(uint8_t Data)
 {
 	uint8_t i = 0;
 	
 	I2C_SCL_L();
 	for(i = 0; i < 8; i++) { // 高位先行
-		if(dat & 0x80)	I2C_SDA_H();
+		if(Data & 0x80)	I2C_SDA_H();
 		else	I2C_SDA_L();
 		
-		dat <<= 1;
+		Data <<= 1;
 		
 		I2C_delay();
 		I2C_SCL_H(); // 中场休息
@@ -239,7 +238,7 @@ uint8_t I2C_mem_write(uint8_t DevAddress, uint8_t MemAddress, uint8_t *pData, ui
 uint8_t I2C_mem_read(uint8_t DevAddress, uint8_t MemAddress, uint8_t *pBuffer, uint16_t Len)
 {				  
     I2C_start();  
-	I2C_write_byte(DevAddress << 1);		//发送写命令	   
+	I2C_write_byte(DevAddress << 1);		//发送写命令
 	if(I2C_wait_ack())
 		return 1;
 	
@@ -259,9 +258,6 @@ uint8_t I2C_mem_read(uint8_t DevAddress, uint8_t MemAddress, uint8_t *pBuffer, u
     I2C_stop();								//产生一个停止条件  
 	return 0;
 }
-
-
-
 
 /*
 
@@ -375,7 +371,3 @@ uint8_t I2C_read_bits(uint8_t DevAddress, uint8_t addr, uint8_t bitStart, uint8_
 		return 1;
 }
 */
-
-
-
-

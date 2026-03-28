@@ -426,6 +426,16 @@
               <FileType>5</FileType>
               <FilePath>.\Header\Menu.h</FilePath>
             </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Header\eeprom.c</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Header\eeprom.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

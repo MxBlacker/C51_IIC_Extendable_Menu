@@ -53,7 +53,7 @@ void main(void)
                 else if (cur_state[temp] == LOW && prev_state[temp] == LOW) {
                     Hold_Counter[temp]++;
                     if (Hold_Counter[temp] >= HOLD_THRESHOLD) {
-                        if (Hold_Counter[temp] % 5 == 0) {  // 长按时每100ms触发一次
+                        if (Hold_Counter[temp] % 2 == 0) {  // 长按时每100ms触发一次
                             switch (temp) {
                                 case 0: Menu_Up(); break;
                                 case 1: Menu_Down(); break;

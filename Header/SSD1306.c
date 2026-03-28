@@ -322,6 +322,7 @@ void OLED_ShowString(uint8_t x, uint8_t y, char *chr, uint8_t charSize, uint8_t 
 * @param 显示显示BMP图片128×64起始点坐标(x,y),x的范围0～127，y为页的范围0～7
 * @retval None
 */
+/*
 void OLED_DrawBMP(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t BMP[], uint8_t Is_Reverse)
 {
     uint16_t j = 0;
@@ -350,6 +351,7 @@ void OLED_DrawBMP(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t BMP[],
     }
 #endif
 }
+*/
 
 /**
 * @brief 初始化SSD1306

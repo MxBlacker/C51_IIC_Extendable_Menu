@@ -1,0 +1,1 @@
+"Header\eeprom.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(.\Header) DEBUG OBJECTEXTEND PRINT(.\Listings\eeprom.lst) OBJECT(.\Objects\eeprom.obj)

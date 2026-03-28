@@ -2,6 +2,7 @@
 #include "stdint.h"
 #include "SSD1306.h"
 #include "Menu.h"
+#include "eeprom.h"
 
 /* ==============================================================================================
                                         界面定义
@@ -36,6 +37,7 @@ Interface_TypeDef code interface[2] = {
 interface_id            xdata current_interface;              // 目前的界面ID
 uint8_t                 xdata current_option_index;           // 目前选的选项的index
 uint8_t                 xdata current_mode;                   // 目前的模式：EDIT_MODE 和 SELECT_MODE
+uint8_t                 save_indicator;
 
 float					xdata value[2][3] = {0, 0, 0, 1, 0, 0};
 
@@ -48,6 +50,7 @@ float					xdata value[2][3] = {0, 0, 0, 1, 0, 0};
                                         外部函数定义
    ============================================================================================== */
 
+float xdata test_float;
 /** 
  * @brief 菜单的初始化函数
  * @note 直接使用 `Menu_Init();` 即可
@@ -61,6 +64,15 @@ void Menu_Init(void)
     current_interface = MAIN_MENU;
     current_option_index = 0;
     current_mode = SELECT_MODE;
+	
+    // 检查 EEPROM 是否已初始化（读出的值是否合理）
+    // 如果 int16 读取为 0xFFFF（未初始化）或 float 读取异常，则写入默认值
+    test_float = EEPROM_ReadFloat(EEPROM_ADDR_FLOAT);
+    
+    if (test_float == 0.0f || test_float < -1000 || test_float > 1000) {
+        EEPROM_WriteFloat(EEPROM_ADDR_FLOAT, 0.0f);
+    }
+	
     Menu_Refresh();
 }
 
@@ -95,12 +107,28 @@ void Menu_Refresh(void)
         if (interface[current_interface].option_mode[i] == EDITABLE) {
             OLED_ShowNum(72, i, (int)value[current_interface][i], 3, 6, 0);
         } else if (interface[current_interface].option_mode[i] == FLOAT_EDITABLE) {
-			OLED_ShowFloat(72, i, value[current_interface][i] * 100, 0);
+			OLED_ShowFloat(72, i, value[current_interface][i] * 100, 0);            // 保留两位小数
 		} else if (interface[current_interface].option_mode[i] == READ_EEP) {
-			// WIP
+			switch (i){
+				case 1:
+					value[current_interface][i] = (float)EEPROM_ReadInt16(EEPROM_ADDR_INT16);
+					OLED_ShowNum(72, i, (int16_t)value[current_interface][i], 3, 6, 0);
+					break;
+				case 2:
+					value[current_interface][i] = EEPROM_ReadFloat(EEPROM_ADDR_FLOAT);
+					OLED_ShowFloat(72, i, value[current_interface][i] * 100, 0);
+					break;
+			}
 		}
     }
+
+    if (save_indicator) {
+        OLED_ShowString(0, 6, "SVD!", 6, 0);
+    } else {
+		OLED_ShowString(0, 6, "    ", 6, 0);
+	}
 	
+    save_indicator = 0;
 	OLED_Refresh_Gram();
 }
 
@@ -165,8 +193,9 @@ void Menu_Forward(void)
             // 切换到编辑模式
             current_mode = EDIT_MODE;
         } else if (CURRENT_OPTION_MODE == INTERACTIBLE) {
-            // 这一块写启动函数
-            // Menu_Event(interface[current_interface].option_action[current_option_index]);
+            EEPROM_WriteInt16(EEPROM_ADDR_INT16, (int16_t)value[MAIN_MENU][0]);
+			EEPROM_WriteFloat(EEPROM_ADDR_FLOAT, value[MAIN_MENU][1]);
+            save_indicator = 1;
         }
     } else if (current_mode == EDIT_MODE) {
         // 切换回选择模式
